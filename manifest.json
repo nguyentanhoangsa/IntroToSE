@@ -1,0 +1,17 @@
+{
+    "manifest_version": 3,
+    "description": "Extension Translate, Revise, ChatAI,Sumarrizes",
+    "name": "Extension Team6",
+    "version": "1.0.1",
+    "action": {
+        "default_popup": "popup.html"
+    },
+
+    "content_scripts": [
+        {
+          "matches": ["<all_urls>"],
+          "css": ["styles.css"],
+          "js": ["main.js"]
+        }
+      ]
+}

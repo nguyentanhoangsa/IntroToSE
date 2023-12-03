@@ -1,0 +1,4 @@
+- Link khởi tạo extension cơ bản:  
+    https://www.youtube.com/watch?v=URJNqRwENq8
+- Link lấy activeElement: 
+    https://developer.mozilla.org/en-US/docs/Web/API/Document/activeElement?fbclid=IwAR0DzHysitFRj7pvQ92rg56bmzpRq5eryM2GTcajmTswnbh1YWQf9s6f_BY
