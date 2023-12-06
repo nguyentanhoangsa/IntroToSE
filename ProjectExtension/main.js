@@ -1,48 +1,53 @@
-console.log("Running extension......", chrome)
-const bodyDOM = document.querySelector('body')
-// bodyDOM.addEventListener("keydown", (e) => {
-//     const activeTextarea = document.activeElement;
-//     // Xử lí hiện cái icon
+function createIcon() {
+    var icon = document.createElement('span');
+    icon.className = 'icon'; // Add classes or styles for your icon
+    icon.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/512/6335/6335609.png" alt="..." style="heigth:20px;width:20px">'; // Replace with your icon path
+    return icon;
+}
 
+//Function to add icon to the clicked input or textarea field
+function addIconToClickedField(clickedElement) {
+    var icon = createIcon();
+    var existingIcon = document.querySelector('.icon');
+    clickedElement.parentNode.style.position = "relative";
+    const compStyles = getComputedStyle(clickedElement);
+    //const compParentStyles=getComputedStyle(clickedElement.parentNode);
+    // Remove existing icon if present
+    if (existingIcon) {
+        existingIcon.parentNode.removeChild(existingIcon);
+    }
 
-//     //Khi nhấn dô icon
-//     if (e.key === 'Tab') {
-//         const myString = activeTextarea.value
-//         console.log(activeTextarea)
-//     }
-// })
-bodyDOM.addEventListener("mouseup", () => {
-    const activeTextarea = document.activeElement;
-    // Xử lí hiện cái icon
-    renderIconExtension(activeTextarea);
-    //Khi nhấn dô icon
-    //icon.addListenner("moseup",()=>{
-    // const myString = activeTextarea.value
-    // console.log(activeTextarea)
-    //})
-})
+    // Add icon to the clicked input or textarea field
 
-function renderIconExtension(activeTextarea) {
-    //
-    const toolTipWrapper = document.createElement("div");
-    toolTipWrapper.id = "iconWrapper";
-    const toolTipIcon = document.createElement("div");
-    toolTipIcon.classList.add("class-icon");
-    toolTipIcon.innerHTML = `<svg width="20px" height="20px"><img src="https://cdn-icons-png.flaticon.com/512/6335/6335609.png" alt="..." style="heigth:20px;width:20px"></svg>`
-    toolTipWrapper.appendChild(toolTipIcon);
-    //Set vị trí cho tooTipWrapper
-    const activeTextareaRect = activeTextarea.getBoundingClientRect();
-    const positionY=(activeTextareaRect.height-20)/2+activeTextareaRect.top;
-    const positionX=activeTextareaRect.right;
-    
-    toolTipWrapper.style.position = 'absolute';
-    toolTipWrapper.style.top = `${positionY}px`;
-    toolTipWrapper.style.left = `${positionX}px`;
-    bodyDOM.appendChild(toolTipWrapper);
+    icon.style.position = "absolute"
+    icon.style.top = (parseFloat(clickedElement.offsetHeight)/2 -10.0).toString()+"px"
+    //icon.style.top = compStyles.paddingTop;
+    icon.style.left = `${clickedElement.offsetLeft + clickedElement.offsetWidth 
+                        - 20 - parseFloat(compStyles.paddingRight) - parseFloat(compStyles.borderRight)}px`;
 
+    clickedElement.parentNode.insertBefore(icon, clickedElement.nextSibling);
 
 }
 
+function checkInput(clickedElement)
+{
+    return clickedElement.tagName == "INPUT" 
+            || clickedElement.tagName == "TEXTAREA" 
+            || clickedElement.role == "textbox"
+}
+// Event listener for clicking on input or textarea fields
+document.addEventListener('click', function (event) {
+    var clickedElement = event.target;
+    //console.log(clickedElement);
 
-
-
+    // Check if the clicked element is an input or textarea field or the icon itself
+    if (checkInput(clickedElement)) {
+        addIconToClickedField(clickedElement);
+    } else {
+        // Remove the icon if clicked elsewhere on the document
+        var icon = document.querySelector('.icon');
+        if (icon) {
+            icon.parentNode.removeChild(icon);
+        }
+    }
+})
