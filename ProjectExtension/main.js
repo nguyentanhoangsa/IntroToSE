@@ -1,8 +1,28 @@
+document.addEventListener('click', action, false)
+
+document.addEventListener('keyup', () => {
+    action()
+}, false)
+
 function createIcon() {
-    var icon = document.createElement('span');
+    var icon = document.createElement('button');
     icon.className = 'icon'; // Add classes or styles for your icon
-    icon.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/512/6335/6335609.png" alt="..." style="heigth:20px;width:20px">'; // Replace with your icon path
+    icon.style.width = '20px'
+    icon.style.height = '20px'
+    //icon.value = "6"
     return icon;
+}
+
+function createImg() {
+    var img = document.createElement('img');
+    img.src ='https://cdn-icons-png.flaticon.com/512/6913/6913644.png';
+    img.alt = '...';
+    img.style.height = '18px';
+    img.style.width = '18px';
+    img.style.position = 'absolute';
+    img.style.top = '0';
+    img.style.left = '0';
+    return img;
 }
 
 //Function to add icon to the clicked input or textarea field
@@ -40,10 +60,11 @@ function checkInput(clickedElement)
             || clickedElement.tagName == "TEXTAREA" 
             || clickedElement.role == "textbox"
 }
-
 // Event listener for clicking on input or textarea fields
-document.addEventListener('click', function (event) {
-    var clickedElement = event.target;
+
+function action()
+{
+    var clickedElement = document.activeElement;
     //console.log(clickedElement);
 
     // Check if the clicked element is an input or textarea field or the icon itself
@@ -52,8 +73,8 @@ document.addEventListener('click', function (event) {
     } else {
         // Remove the icon if clicked elsewhere on the document
         var icon = document.querySelector('.icon');
-        if (icon) {
+        if (icon && icon == clickedElement.nextSibling) {
             icon.parentNode.removeChild(icon);
         }
     }
-})
+}
