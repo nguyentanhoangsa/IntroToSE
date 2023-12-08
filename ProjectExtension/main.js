@@ -8,10 +8,12 @@ function createIcon() {
 //Function to add icon to the clicked input or textarea field
 function addIconToClickedField(clickedElement) {
     var icon = createIcon();
+
     var existingIcon = document.querySelector('.icon');
     clickedElement.parentNode.style.position = "relative";
     const compStyles = getComputedStyle(clickedElement);
-    //const compParentStyles=getComputedStyle(clickedElement.parentNode);
+    const parentStyles = getComputedStyle(clickedElement.parentNode)
+
     // Remove existing icon if present
     if (existingIcon) {
         existingIcon.parentNode.removeChild(existingIcon);
@@ -20,21 +22,25 @@ function addIconToClickedField(clickedElement) {
     // Add icon to the clicked input or textarea field
 
     icon.style.position = "absolute"
-    icon.style.top = (parseFloat(clickedElement.offsetHeight)/2 -10.0).toString()+"px"
+    icon.style.top = (clickedElement.offsetHeight/2 -10.0 
+                        + parseFloat(parentStyles.paddingTop) + parseFloat(parentStyles.borderTop)).toString()+"px"
     //icon.style.top = compStyles.paddingTop;
-    icon.style.left = `${clickedElement.offsetLeft + clickedElement.offsetWidth 
-                        - 20 - parseFloat(compStyles.paddingRight) - parseFloat(compStyles.borderRight)}px`;
+    icon.style.right = `${clickedElement.parentNode.offsetWidth 
+                            + parseFloat(compStyles.paddingRight) + parseFloat(compStyles.borderRight)
+                            - clickedElement.offsetLeft - clickedElement.offsetWidth}px`;
 
     clickedElement.parentNode.insertBefore(icon, clickedElement.nextSibling);
-
+    var img = createImg();
+    icon.appendChild(img);
 }
 
 function checkInput(clickedElement)
 {
-    return clickedElement.tagName == "INPUT" 
+    return (clickedElement.tagName == "INPUT" && (clickedElement.type == "text" || clickedElement.type == "search"))
             || clickedElement.tagName == "TEXTAREA" 
             || clickedElement.role == "textbox"
 }
+
 // Event listener for clicking on input or textarea fields
 document.addEventListener('click', function (event) {
     var clickedElement = event.target;
