@@ -1,7 +1,7 @@
 #popup {
     width: 340px;
     height: 170px;
-  }
+}
   
 .center {
     display: block;
@@ -9,7 +9,7 @@
     margin-right: auto;
 }
   
-#title-etn {
+#name-etn {
     color: #0e2f52; 
     font-size: 25px; 
     margin: 0; 
