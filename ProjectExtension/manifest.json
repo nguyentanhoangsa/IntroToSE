@@ -3,15 +3,26 @@
     "description": "Extension Translate, Revise, ChatAI,Sumarrizes",
     "name": "Extension Team6",
     "version": "1.0.1",
+    "permissions": ["activeTab"],
     "action": {
-        "default_popup": "popup.html"
-    },
-
-    "content_scripts": [
-        {
-          "matches": ["<all_urls>"],
-          "css": ["styles.css"],
-          "js": ["main.js"]
+        "default_popup": "popup.html",
+        "default_icon": {
+          "16": "img/icon-16.png",
+          "32": "img/icon-32.png",
+          "48": "img/icon-48.png",
+          "128": "img/icon-128.png"
         }
-      ]
+    },
+    "icons": {
+        "16": "img/icon-16.png",
+        "32": "img/icon-32.png",
+        "48": "img/icon-48.png",
+        "128": "img/icon-128.png"
+    },
+    "content_scripts": [
+      {
+        "js": ["main.js"],
+        "matches": ["<all_urls>"]
+      }
+  ]
 }
