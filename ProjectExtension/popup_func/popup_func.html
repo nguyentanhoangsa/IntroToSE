@@ -15,14 +15,23 @@
       </div>
       <div id="func-popup-etn">
         <button class="button-func">
-          <img id="icon-translate" src="" alt="icon-translate" />Translate to
-          English
+          <img id="icon-translate" src="" alt="icon-translate" />
+          <div>Translate to</div>
+          <select id="select-language">
+            <option value="" disabled selected hidden>Choose Language</option>
+            <option value="English">English</option>
+            <option value="French">French</option>
+            <option value="Spanish">Spanish</option>
+            <option value="Vietnamese">Vietnamese</option>
+          </select>
         </button>
         <button class="button-func">
-          <img id="icon-revise" src="" alt="icon-revise" />Revise it
+          <img id="icon-revise" src="" alt="icon-revise" />
+          <div>Revise it</div>
         </button>
         <button class="button-func">
-          <img id="icon-summarize" src="" />Summarize it
+          <img id="icon-summarize" src="" />
+          <div>Summarize it</div>
         </button>
         <div id="chatai">
           <input type="text" placeholder="Type your message" />

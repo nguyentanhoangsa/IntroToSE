@@ -104,3 +104,10 @@ height: 20px;
 cursor: pointer;
 margin-right: 15px;
 }
+#select-language {
+  margin-left: 10px;
+  padding: 3px;
+}
+#select-language:hover{
+  background-color: rgb(21, 111, 191);
+}
