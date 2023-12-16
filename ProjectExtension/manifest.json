@@ -1,28 +1,47 @@
 {
-    "manifest_version": 3,
-    "description": "Extension Translate, Revise, ChatAI,Sumarrizes",
-    "name": "Extension Team6",
-    "version": "1.0.1",
-    "permissions": ["activeTab"],
-    "action": {
-        "default_popup": "popup/popup.html",
-        "default_icon": {
-          "16": "img/icon-16.png",
-          "32": "img/icon-32.png",
-          "48": "img/icon-48.png",
-          "128": "img/icon-128.png"
-        }
-    },
-    "icons": {
-        "16": "img/icon-16.png",
-        "32": "img/icon-32.png",
-        "48": "img/icon-48.png",
-        "128": "img/icon-128.png"
-    },
-    "content_scripts": [
-      {
-        "js": ["scripts/main.js"],
-        "matches": ["<all_urls>"]
-      }
+  "manifest_version": 3,
+  "description": "Extension Translate, Revise, ChatAI,Sumarrizes",
+  "name": "Extension Team6",
+  "version": "1.0.1",
+  "permissions": ["activeTab"],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "img/icon-16.png",
+      "32": "img/icon-32.png",
+      "48": "img/icon-48.png",
+      "128": "img/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "img/icon-16.png",
+    "32": "img/icon-32.png",
+    "48": "img/icon-48.png",
+    "128": "img/icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "js": ["scripts/main.js"],
+      "css": ["popup_func/popup_func.css", "popup/popup.css"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "img/icon-16.png",
+        "img/icon-32.png",
+        "img/icon-48.png",
+        "img/icon-128.png",
+        "popup_func/popup_func.html",
+        "popup_func/popup_func.css",
+        "img/icon-x.png",
+        "img/icon-translate.png",
+        "img/icon-revise.png",
+        "img/icon-summarize.png",
+        "img/icon-send.png"
+      ],
+      "matches": ["<all_urls>"]
+    }
   ]
 }

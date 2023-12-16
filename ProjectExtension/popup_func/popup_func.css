@@ -1,106 +1,106 @@
 #popup-func {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    background-color: #bbdaf8;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 999;
-    border-radius: 10px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #bbdaf8;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  border-radius: 10px;
 }
 
 #icon-etn {
-  display: flex;
-  align-items: center;
+display: flex;
+align-items: center;
 }
 
 #icon {
-  width: 32px; 
-  height: 32px; 
-  margin-right: 40px;
-  margin-left: 15px;
-  margin-bottom: 18px;
+width: 32px; 
+height: 32px; 
+margin-right: 40px;
+margin-left: 15px;
+margin-bottom: 18px;
 }
 
 #name-etn1 {
-  color: #0e2f52; 
-  margin: 16px 0 0;
-  font-size: 18px; 
-  margin-bottom: 20px;
-  margin-top: 5px;
+color: #0e2f52; 
+margin: 16px 0 0;
+font-size: 18px; 
+margin-bottom: 20px;
+margin-top: 5px;
 }
 
 #icon-x {
-  width: 30px;
-  height: 30px;
-  margin-left: 40px;
-  margin-bottom: 15px;
-  border: 0px solid #70b6e9;
-  border-radius: 10px;
-  transition: box-shadow 0.3s; 
-  background-color: #d4e9f9a5;
+width: 30px;
+height: 30px;
+margin-left: 40px;
+margin-bottom: 15px;
+border: 0px solid #70b6e9;
+border-radius: 10px;
+transition: box-shadow 0.3s; 
+background-color: #d4e9f9a5;
 }
 
 #icon-x:hover {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Đổ bóng khi hover */
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Đổ bóng khi hover */
 }
 
-  
+
 #func-popup-etn {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
-  
+
 .button-func {
-    margin: 10px;
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    margin-bottom: 5px;
-    background-color: #e4edf4;
-    color: #000000;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    border-radius: 10px;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 5px;
+  background-color: #e4edf4;
+  color: #000000;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 10px;
 }
-  
+
 .button-func img {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 }
-  
+
 .button-func:hover {
-    background-color: #70b6e9;
+  background-color: #70b6e9;
 }
 
 #chatai {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 5px;
-  border: 1px solid #e4edf4;
-  border-radius: 10px;
-  background-color: #e4edf4;
-  width: 300px; /* Điều chỉnh độ rộng theo mong muốn của bạn */
+margin-top: 10px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 5px;
+border: 1px solid #e4edf4;
+border-radius: 10px;
+background-color: #e4edf4;
+width: 300px; /* Điều chỉnh độ rộng theo mong muốn của bạn */
 }
 
 #chatai input[type="text"] {
-  flex: 1;
-  padding: 10px;
-  margin: 0;
-  border: 0 solid #c6777700;
-  background-color: #e4edf4;
-  border-radius: 15px;
-  outline: none;
+flex: 1;
+padding: 10px;
+margin: 0;
+border: 0 solid #c6777700;
+background-color: #e4edf4;
+border-radius: 15px;
+outline: none;
 }
 
 #chatai img {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  margin-right: 15px;
+width: 20px;
+height: 20px;
+cursor: pointer;
+margin-right: 15px;
 }
