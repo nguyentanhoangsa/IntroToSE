@@ -142,23 +142,40 @@ function createPopup(clickedElement) {
     //console.log("aaaaaaaaaaaaaaaaa");
 }
 function setPopupContent(data, clickedElement) {
-    const popup_func = document.getElementById("file-container");
-    //Khúc chèn nội dung vào container
-    popup_func.innerHTML = data;
+    const fileContainer = document.getElementById("file-container");
+    //Khúc chèn nội dung vào file-container
+    fileContainer.innerHTML = data;
     // Gán kích thước của div bằng kích thước tối đa của nội dung bên trong
-    const popupFunc = popup_func.querySelector("#popup-func");
+    const popupFunc = fileContainer.querySelector("#popup-func");
     popupFunc.style.position = "absolute";
     // Gán chiều rộng thẻ container bằng thèn con lớn nhất
     const rect = popupFunc.getBoundingClientRect();
-    popup_func.style.width = `${rect.width}px`;
-    popup_func.style.height = `${rect.height}px`;
+    fileContainer.style.width = `${rect.width}px`;
+    fileContainer.style.height = `${rect.height}px`;
 
     //Set vị trí cho thẻ container bao ngoài
     const parentClickElementRect = clickedElement.parentNode.getBoundingClientRect();
     const top = parentClickElementRect.top + parentClickElementRect.height;
     const left = parentClickElementRect.left + parentClickElementRect.width;
-    popup_func.style.top = `${top}px`;
-    popup_func.style.left = `${left}px`;
+    fileContainer.style.top = `${top}px`;
+    fileContainer.style.left = `${left}px`;
+    // Gọi hàm setRelativePosition mỗi khi cửa sổ được cuộn hoặc thay đổi kích thước
+    window.addEventListener('scroll', () => {
+        //Set vị trí cho thẻ container bao ngoài
+        const parentClickElementRect = clickedElement.parentNode.getBoundingClientRect();
+        const top = parentClickElementRect.top + parentClickElementRect.height;
+        const left = parentClickElementRect.left + parentClickElementRect.width;
+        fileContainer.style.top = `${top}px`;
+        fileContainer.style.left = `${left}px`;
+    });
+    window.addEventListener('resize', () => {
+        //Set vị trí cho thẻ container bao ngoài
+        const parentClickElementRect = clickedElement.parentNode.getBoundingClientRect();
+        const top = parentClickElementRect.top + parentClickElementRect.height;
+        const left = parentClickElementRect.left + parentClickElementRect.width;
+        fileContainer.style.top = `${top}px`;
+        fileContainer.style.left = `${left}px`;
+    });
 
     const icons = setIconUrls();
 
@@ -168,6 +185,18 @@ function setPopupContent(data, clickedElement) {
     document.getElementById("icon-revise").src = icons["icon-revise"];
     document.getElementById("icon-summarize").src = icons["icon-summarize"];
     document.getElementById("icon-send").src = icons["icon-send"];
+
+
+
+    //=======================Bắt sự kiện các click trong popup_func===================================
+    //======== Bắt sự kiện nút icon-x
+    const iconXElement = document.querySelector("#icon-x");
+    iconXElement.addEventListener('click', () => {
+        fileContainer.parentNode.removeChild(fileContainer);
+    })
+
+    //================================================================ 
+
 }
 // Tạo hàm để thiết lập URL của hình ảnh
 function setIconUrls() {
@@ -189,3 +218,30 @@ function setIconUrls() {
 
     return iconUrlsMap;
 }
+//================================================================
+
+
+
+
+
+
+
+// const token="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"
+// const abc=document.querySelector("quy")
+// fetch('https://api.openai.com/v1/chat/completions',{
+//     method: 'POST',
+//     headers:{
+//         'Content-Type': 'application/json',
+//         'Authorization': 'Bearer '+token,
+//     },
+//     body: JSON.stringify({
+//         "model": "gpt-3.5-turbo",
+//         "messages": [{"role": "user","content":"Dịch sang tiếng anh: Xin chào Sa"}]
+//     })
+// }).then(response =>{
+//     return response.json();
+// }).then(data => {
+//     //abc.innertText=data.choices[0].message.content;
+//     console.log(data.choices[0].message.content)
+// })
+// //https://youtu.be/SnV2fkAawrc?si=1coB_fwx_t1U5RHz
