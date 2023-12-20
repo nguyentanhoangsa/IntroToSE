@@ -95,7 +95,7 @@ function createContainer() {
     container.id = "file-container"; // Add classes or styles for your icon
     // container.style.display = "block";
     container.style.position = "fixed";
-    container.style.zIndex="666"
+    container.style.zIndex="7777"
     return container;
 }
 
@@ -118,6 +118,7 @@ function createIcon() {
     icon.className = "icon"; // Add classes or styles for your icon
     icon.style.width = "20px";
     icon.style.height = "20px";
+    icon.type = "button";
     return icon;
 }
 //================================================================ 
