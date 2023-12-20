@@ -18,7 +18,7 @@ document.addEventListener(
 function checkInput(clickedElement) {
     return (
         (clickedElement.tagName == "INPUT" &&
-            (clickedElement.type == "text" || clickedElement.type == "search")) ||
+            (clickedElement.type == "text" || clickedElement.type == "search" || clickedElement.type == "email")) ||
         clickedElement.tagName == "TEXTAREA" ||
         clickedElement.role == "textbox"
     );
@@ -68,12 +68,13 @@ function addIconToClickedField(clickedElement) {
         clickedElement.offsetLeft -
         clickedElement.offsetWidth
         }px`;
-
+    // icon.style.zIndex = compStyles.zIndex + 1;
+    icon.style.zIndex = "6666";
     clickedElement.parentNode.appendChild(icon);
 
     var container = createContainer();
-    document.body.appendChild(container);
-    //clickedElement.parentNode.insertBefore(container, clickedElement.nextSibling);
+    //document.body.appendChild(container);
+    clickedElement.parentNode.appendChild(container);
 
     // createPopup();
     // openCustomPopup();
@@ -83,18 +84,21 @@ function addIconToClickedField(clickedElement) {
 
     // Thêm sự kiện click cho icon để hiển thị popup
     icon.addEventListener("click", function () {
-        toggleFileVisibility(clickedElement); // Gọi hàm hiển thị popup khi icon được click
+        toggleFileVisibility(icon); // Gọi hàm hiển thị popup khi icon được click
     });
 }
+
+
 //Hàm tạo Container de bao bọc bên ngoài popup_func chon chuc nang
 function createContainer() {
     var container = document.createElement("div");
     container.id = "file-container"; // Add classes or styles for your icon
     // container.style.display = "block";
-    container.style.position = "fixed"
-    container.style.zIndex = "777777";
+    container.style.position = "fixed";
+    container.style.zIndex="666"
     return container;
 }
+
 //Hàm khởi tạo hình ảnh số 6-> Team 6 để chứa trong icon
 function createImg() {
     var img = document.createElement("img");
@@ -107,33 +111,42 @@ function createImg() {
     img.style.left = "0";
     return img;
 }
+
 //Hàm khởi tạo nút button bên ngoài để chứa số 6 tạo ra từ hàm createImg ở trên
 function createIcon() {
     var icon = document.createElement("button");
     icon.className = "icon"; // Add classes or styles for your icon
     icon.style.width = "20px";
     icon.style.height = "20px";
-    icon.style.zIndex = "666666";
     return icon;
 }
 //================================================================ 
 
 
-//==================Các hàm thực hiện khi click vào icon thì hiển thị ra bảng để tương tác vs user===========
-//Hàm hiển thị chính của toggle hiển thị
-var isFileVisible = false;
-function toggleFileVisibility(clickedElement) {
-    createPopup(clickedElement);
-    const fileContainer = document.getElementById("file-container");
-    //console.log(fileContainer);
+//==================Các hàm thực hiện khi click vào icon thì hiển thị ra bảng để tương tác vs user và ẩn bảng===========
+//Hàm hiển thị file-container
+function toggleFileVisibility(icon) {
+    const fileContainer=document.querySelector("#file-container");
+    if(fileContainer.textContent==''){
+        createInnerContainer(icon);
+    }else{
+        fileContainer.style.display="block";
+    }
 }
-// Hàm để thiết lập nội dung cho popup
-function createPopup(clickedElement) {
+
+// Ẩn File-Container để lúc sau cần thì chỉ cần chuyển sang dạng block để hiển thị lại, k cần phải tạo mới
+function hideFileContainer(){
+    document.querySelector("#file-container").style.display="none";
+}
+
+
+// Hàm để thiết lập nội dung cho file-container
+function createInnerContainer(icon) {
     //console.log("Batdau");
     fetch(chrome.runtime.getURL("popup_func/popup_func.html"))
         .then((response) => response.text())
         .then((data) => {
-            setPopupContent(data, clickedElement);
+            setInnerContainerContent(data, icon);
         })
         .catch((error) => {
             console.error("Failed to fetch popup HTML:", error);
@@ -141,7 +154,7 @@ function createPopup(clickedElement) {
 
     //console.log("aaaaaaaaaaaaaaaaa");
 }
-function setPopupContent(data, clickedElement) {
+function setInnerContainerContent(data, icon) {
     const fileContainer = document.getElementById("file-container");
     //Khúc chèn nội dung vào file-container
     fileContainer.innerHTML = data;
@@ -152,29 +165,16 @@ function setPopupContent(data, clickedElement) {
     const rect = popupFunc.getBoundingClientRect();
     fileContainer.style.width = `${rect.width}px`;
     fileContainer.style.height = `${rect.height}px`;
+    // fileContainer.style.zIndex = getComputedStyle(icon).zIndex + 1;
 
-    //Set vị trí cho thẻ container bao ngoài
-    const parentClickElementRect = clickedElement.parentNode.getBoundingClientRect();
-    const top = parentClickElementRect.top + parentClickElementRect.height;
-    const left = parentClickElementRect.left + parentClickElementRect.width;
-    fileContainer.style.top = `${top}px`;
-    fileContainer.style.left = `${left}px`;
+    //set vị trí cho file-container
+    setPositionForFileContainer(fileContainer,icon,rect);
     // Gọi hàm setRelativePosition mỗi khi cửa sổ được cuộn hoặc thay đổi kích thước
     window.addEventListener('scroll', () => {
-        //Set vị trí cho thẻ container bao ngoài
-        const parentClickElementRect = clickedElement.parentNode.getBoundingClientRect();
-        const top = parentClickElementRect.top + parentClickElementRect.height;
-        const left = parentClickElementRect.left + parentClickElementRect.width;
-        fileContainer.style.top = `${top}px`;
-        fileContainer.style.left = `${left}px`;
+        setPositionForFileContainer(fileContainer,icon,rect);
     });
     window.addEventListener('resize', () => {
-        //Set vị trí cho thẻ container bao ngoài
-        const parentClickElementRect = clickedElement.parentNode.getBoundingClientRect();
-        const top = parentClickElementRect.top + parentClickElementRect.height;
-        const left = parentClickElementRect.left + parentClickElementRect.width;
-        fileContainer.style.top = `${top}px`;
-        fileContainer.style.left = `${left}px`;
+        setPositionForFileContainer(fileContainer,icon,rect);
     });
 
     const icons = setIconUrls();
@@ -192,12 +192,33 @@ function setPopupContent(data, clickedElement) {
     //======== Bắt sự kiện nút icon-x
     const iconXElement = document.querySelector("#icon-x");
     iconXElement.addEventListener('click', () => {
-        fileContainer.parentNode.removeChild(fileContainer);
+        hideFileContainer();
+
     })
-
     //================================================================ 
-
 }
+
+//set Vị trí cho file-container
+function setPositionForFileContainer(fileContainer,icon,rect){
+        //Set vị trí cho thẻ container bao ngoài
+        const iconRect = icon.getBoundingClientRect();
+        const top = iconRect.top + iconRect.height;
+        const left = iconRect.left + iconRect.width;
+        if (top + rect.height <= window.innerHeight) {
+            fileContainer.style.top = `${top+5}px`;
+        }
+        else {
+            fileContainer.style.top = `${iconRect.top - rect.height-5}px`;
+        }
+        if (left + rect.width <= window.innerWidth) {
+            fileContainer.style.left = `${left}px`;
+        }
+        else {
+            fileContainer.style.left = `${window.innerWidth - rect.width}px`
+        }
+}
+
+
 // Tạo hàm để thiết lập URL của hình ảnh
 function setIconUrls() {
     const iconUrls = [
