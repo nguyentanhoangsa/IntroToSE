@@ -1,5 +1,8 @@
 //==========================Bắt sự kiện khi nào thì làm hoạt động action hiển thị extension======================  
 //Bắt sự kiện Click hoặc là keyup để thực hiện action và hiển thị nút extension
+// Biến này để giữ lại biến mà chúng ta click vào để mà khi chúng ta bấm ra vị trí trống bấm vô lại vẫn có được vị trí đó.
+var editableElement;
+
 document.addEventListener("click", action, false);
 
 document.addEventListener(
@@ -22,6 +25,12 @@ function checkInput(clickedElement) {
         clickedElement.tagName == "TEXTAREA" ||
         clickedElement.role == "textbox"
     );
+    // var nodeName = clickedElement.nodeName.toLowerCase();
+    // if (clickedElement.nodeType == 1 && (nodeName == "textarea" ||
+    //     (nodeName == "input" && /^(?:text|email|number|search|tel|url|password)$/i.test(clickedElement.type)))) {
+    //     return true;
+    // }
+    // return false;
 }
 
 // Bắt sự kiện lắng nghe ở trên để hiện thì 
@@ -31,7 +40,10 @@ function action() {
 
     // Kiểm tra đầu vào để nếu đúng thì mới addIcon vào cái vùng Clicked được, còn nếu không thì tìm vùng chỗ
     // có trong bodey mà remove
-    if (checkInput(clickedElement)) {
+    //Cần kiểm tra điều kiện khác chỗ này vì khi chat với AI thì thẻ nhập vào cũng là input
+    //nếu ta click vào đó thì nó sẽ không thay đổi clickelement hiện tại (ô mà chúng ta hiện dữ liệu sau khi AI trả về).
+    if (checkInput(clickedElement) && clickedElement.id !== "text-chat-with-ai") {
+        editableElement = clickedElement;
         addIconToClickedField(clickedElement);
     }
 }
@@ -69,12 +81,12 @@ function addIconToClickedField(clickedElement) {
         clickedElement.offsetWidth
         }px`;
     // icon.style.zIndex = compStyles.zIndex + 1;
-    icon.style.zIndex = "6666";
+    icon.style.zIndex = "66666666";
     clickedElement.parentNode.appendChild(icon);
 
     var container = createContainer();
-    //document.body.appendChild(container);
-    clickedElement.parentNode.appendChild(container);
+    document.body.appendChild(container);
+    //clickedElement.parentNode.appendChild(container);
 
     // createPopup();
     // openCustomPopup();
@@ -95,7 +107,7 @@ function createContainer() {
     container.id = "file-container"; // Add classes or styles for your icon
     // container.style.display = "block";
     container.style.position = "fixed";
-    container.style.zIndex="7777"
+    container.style.zIndex = "777777777"
     return container;
 }
 
@@ -127,17 +139,17 @@ function createIcon() {
 //==================Các hàm thực hiện khi click vào icon thì hiển thị ra bảng để tương tác vs user và ẩn bảng===========
 //Hàm hiển thị file-container
 function toggleFileVisibility(icon) {
-    const fileContainer=document.querySelector("#file-container");
-    if(fileContainer.textContent==''){
+    const fileContainer = document.querySelector("#file-container");
+    if (fileContainer.textContent == '') {
         createInnerContainer(icon);
-    }else{
-        fileContainer.style.display="block";
+    } else {
+        fileContainer.style.display = "block";
     }
 }
 
 // Ẩn File-Container để lúc sau cần thì chỉ cần chuyển sang dạng block để hiển thị lại, k cần phải tạo mới
-function hideFileContainer(){
-    document.querySelector("#file-container").style.display="none";
+function hideFileContainer() {
+    document.querySelector("#file-container").style.display = "none";
 }
 
 
@@ -169,13 +181,13 @@ function setInnerContainerContent(data, icon) {
     // fileContainer.style.zIndex = getComputedStyle(icon).zIndex + 1;
 
     //set vị trí cho file-container
-    setPositionForFileContainer(fileContainer,icon,rect);
+    setPositionForFileContainer(fileContainer, icon, rect);
     // Gọi hàm setRelativePosition mỗi khi cửa sổ được cuộn hoặc thay đổi kích thước
     window.addEventListener('scroll', () => {
-        setPositionForFileContainer(fileContainer,icon,rect);
+        setPositionForFileContainer(fileContainer, icon, rect);
     });
     window.addEventListener('resize', () => {
-        setPositionForFileContainer(fileContainer,icon,rect);
+        setPositionForFileContainer(fileContainer, icon, rect);
     });
 
     const icons = setIconUrls();
@@ -194,29 +206,53 @@ function setInnerContainerContent(data, icon) {
     const iconXElement = document.querySelector("#icon-x");
     iconXElement.addEventListener('click', () => {
         hideFileContainer();
-
     })
+    //======== Bắt sự kiện nút dịch
+    const iconTranslateElement = document.querySelector("#translate");
+    const select = iconTranslateElement.querySelector("#select-language");
+    select.addEventListener('change', function () {
+        const selectedValue = select.value; // Lấy giá trị của option đã chọn
+        const myContent = editableElement.value;
+        if (selectedValue == "") {
+            console.log("Chọn ngôn ngữ đi");
+        } else {
+            if (myContent === "") {
+                console.log("Nhập input dô");
+            } else {
+                myNewContent = "Translate to " + selectedValue + " " + myContent;
+                CallOpenAI(myNewContent);
+            }
+
+        }
+    });
     //================================================================ 
 }
 
 //set Vị trí cho file-container
-function setPositionForFileContainer(fileContainer,icon,rect){
-        //Set vị trí cho thẻ container bao ngoài
-        const iconRect = icon.getBoundingClientRect();
-        const top = iconRect.top + iconRect.height;
-        const left = iconRect.left + iconRect.width;
-        if (top + rect.height <= window.innerHeight) {
-            fileContainer.style.top = `${top+5}px`;
-        }
-        else {
-            fileContainer.style.top = `${iconRect.top - rect.height-5}px`;
-        }
-        if (left + rect.width <= window.innerWidth) {
-            fileContainer.style.left = `${left}px`;
-        }
-        else {
-            fileContainer.style.left = `${window.innerWidth - rect.width}px`
-        }
+function setPositionForFileContainer(fileContainer, icon, rect) {
+    //Set vị trí cho thẻ container bao ngoài
+    console.log(icon);
+    const iconRect = icon.getBoundingClientRect();
+    console.log(icon.getBoundingClientRect());
+    console.log(iconRect)
+    const top = iconRect.top + iconRect.height;
+    console.log(top);
+    console.log(iconRect.top);
+    console.log(iconRect.height);
+    const left = iconRect.left + iconRect.width;
+    if (top + rect.height <= window.innerHeight) {
+        console.log(top + 5);
+        fileContainer.style.top = `${top + 5}px`;
+    }
+    else {
+        fileContainer.style.top = `${iconRect.top - rect.height - 5}px`;
+    }
+    if (left + rect.width <= window.innerWidth) {
+        fileContainer.style.left = `${left}px`;
+    }
+    else {
+        fileContainer.style.left = `${window.innerWidth - rect.width}px`
+    }
 }
 
 
@@ -242,28 +278,27 @@ function setIconUrls() {
 }
 //================================================================
 
+//=============================Gọi API chat OpenAI========================
 
-
-
-
-
-
-// const token="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"
-// const abc=document.querySelector("quy")
-// fetch('https://api.openai.com/v1/chat/completions',{
-//     method: 'POST',
-//     headers:{
-//         'Content-Type': 'application/json',
-//         'Authorization': 'Bearer '+token,
-//     },
-//     body: JSON.stringify({
-//         "model": "gpt-3.5-turbo",
-//         "messages": [{"role": "user","content":"Dịch sang tiếng anh: Xin chào Sa"}]
-//     })
-// }).then(response =>{
-//     return response.json();
-// }).then(data => {
-//     //abc.innertText=data.choices[0].message.content;
-//     console.log(data.choices[0].message.content)
-// })
+function CallOpenAI(myContent) {
+    const token = "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"
+    fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+        },
+        body: JSON.stringify({
+            "model": "gpt-3.5-turbo",
+            "messages": [{ "role": "user", "content": "Please give me a concise answer. " + myContent }]
+        })
+    }).then(response => {
+        return response.json();
+    }).then(data => {
+        //abc.innertText=data.choices[0].message.content;
+        a = data.choices[0].message.content;
+        console.log(data);
+        editableElement.value = a;
+    })
+}
 // //https://youtu.be/SnV2fkAawrc?si=1coB_fwx_t1U5RHz
