@@ -225,6 +225,18 @@ function setInnerContainerContent(data, icon) {
 
         }
     });
+    //=======Bắt sự kiện nút revise
+    const iconReviseElement = document.querySelector("#revise");
+    console.log(iconReviseElement);
+    iconReviseElement.addEventListener('click', function () {
+        const myContentRevise = editableElement.value;
+        if (myContentRevise === "") {
+            console.log("Nhập input vào");
+        } else {
+            myNewContentRevise = "Revise sentences: " + myContentRevise;
+            CallOpenAI(myNewContentRevise);
+        }
+    })
     //================================================================ 
 }
 
