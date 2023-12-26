@@ -1,4 +1,9 @@
-//==========================Bắt sự kiện khi nào thì làm hoạt động action hiển thị extension======================  
+/*1.====================================================================== 
+            BẮT SỰ KIỆN KHI NÀO HIỂN THỊ ICON
+    ====================================================================== 
+*/
+
+
 //Bắt sự kiện Click hoặc là keyup để thực hiện action và hiển thị nút extension
 // Biến này để giữ lại biến mà chúng ta click vào để mà khi chúng ta bấm ra vị trí trống bấm vô lại vẫn có được vị trí đó.
 var editableElement;
@@ -13,10 +18,20 @@ document.addEventListener(
     false
 );
 
-//================================================================ 
 
 
-//==========================Kiểm tra điều kiện để hiển thị icon và thực hiện add Icon======================
+//1.========================Kết thúc bắt sự kiện action======================================== 
+
+
+
+
+
+/*2.======================================================================
+        KIỂM TRA ĐIỀU KIỆN ĐỂ HIỂN THỊ ICON VÀ GỌI HÀM ADD ICON
+======================================================================
+*/
+
+
 // Kiểm tra đầu vào là input hay là textarea 
 function checkInput(clickedElement) {
     return (
@@ -25,12 +40,6 @@ function checkInput(clickedElement) {
         clickedElement.tagName == "TEXTAREA" ||
         clickedElement.role == "textbox"
     );
-    // var nodeName = clickedElement.nodeName.toLowerCase();
-    // if (clickedElement.nodeType == 1 && (nodeName == "textarea" ||
-    //     (nodeName == "input" && /^(?:text|email|number|search|tel|url|password)$/i.test(clickedElement.type)))) {
-    //     return true;
-    // }
-    // return false;
 }
 
 // Bắt sự kiện lắng nghe ở trên để hiện thì 
@@ -47,10 +56,18 @@ function action() {
         addIconToClickedField(clickedElement);
     }
 }
-//================================================================ 
 
 
-//==========================Các hàm add Icon====================== 
+//2.===========================Kết thúc kiểm tra điều kiện hiển thị icon và addIcon================================== 
+
+
+
+/*3.======================================================================
+                   CÁC HÀM ADD ICON
+======================================================================             
+*/
+
+
 //Hàm add icon
 function addIconToClickedField(clickedElement) {
     var icon = createIcon();
@@ -100,8 +117,7 @@ function addIconToClickedField(clickedElement) {
     });
 }
 
-
-//Hàm tạo Container de bao bọc bên ngoài popup_func chon chuc nang
+//Hàm tạo Container de bao bọc bên ngoài popup_func chọn chức năng
 function createContainer() {
     var container = document.createElement("div");
     container.id = "file-container"; // Add classes or styles for your icon
@@ -124,7 +140,7 @@ function createImg() {
     return img;
 }
 
-//Hàm khởi tạo nút button bên ngoài để chứa số 6 tạo ra từ hàm createImg ở trên
+//Hàm khởi tạo nút button để chứa số 6 tạo ra từ hàm createImg ở trên
 function createIcon() {
     var icon = document.createElement("button");
     icon.className = "icon"; // Add classes or styles for your icon
@@ -133,11 +149,20 @@ function createIcon() {
     icon.type = "button";
     return icon;
 }
-//================================================================ 
 
 
-//==================Các hàm thực hiện khi click vào icon thì hiển thị ra bảng để tương tác vs user và ẩn bảng===========
-//Hàm hiển thị file-container
+//3.=====================Kết thúc các hàm add Icon=========================================== 
+
+
+
+/*4.======================================================================
+        CÁC HÀM THỰC HIỆN KHI CLICK VÀO ICON THÌ HIỂN THỊ RA BẢNG ĐỂ TƯƠNG TÁC VỚI USER VÀ ẨN BẢNG
+    ====================================================================== 
+ */
+
+
+
+//Hàm hiển thị file-container 
 function toggleFileVisibility(icon) {
     const fileContainer = document.querySelector("#file-container");
     if (fileContainer.textContent == '') {
@@ -153,7 +178,7 @@ function hideFileContainer() {
 }
 
 
-// Hàm để thiết lập nội dung cho file-container
+// Hàm để thiết lập yêu cầu truy cập tới file html,css để truy cập tới để set nội dung trong Container
 function createInnerContainer(icon) {
     //console.log("Batdau");
     fetch(chrome.runtime.getURL("popup_func/popup_func.html"))
@@ -167,6 +192,7 @@ function createInnerContainer(icon) {
 
     //console.log("aaaaaaaaaaaaaaaaa");
 }
+//Hàm thiết lập cụ thể nội dung của file-container và bắt các sự kiện khi translate,revise,... ở trong đây
 function setInnerContainerContent(data, icon) {
     const fileContainer = document.getElementById("file-container");
     //Khúc chèn nội dung vào file-container
@@ -225,9 +251,8 @@ function setInnerContainerContent(data, icon) {
 
         }
     });
-    //=======Bắt sự kiện nút revise
+    //=======Bắt sự kiện nút revise======
     const iconReviseElement = document.querySelector("#revise");
-    console.log(iconReviseElement);
     iconReviseElement.addEventListener('click', function () {
         const myContentRevise = editableElement.value;
         if (myContentRevise === "") {
@@ -237,10 +262,20 @@ function setInnerContainerContent(data, icon) {
             CallOpenAI(myNewContentRevise);
         }
     })
-    //================================================================ 
+    //=======Bắt sự kiện nút summarise
+    const iconSummariseElement = document.querySelector("#summarize");
+    iconSummariseElement.addEventListener('click', function () {
+        const myContentSummarise = editableElement.value;
+        if (myContentSummarise === "") {
+            console.log("Nhập input vào");
+        } else {
+            myNewContentSummarise = "Summarise sentences: " + myContentSummarise;
+            CallOpenAI(myNewContentSummarise);
+        }
+    })
+    //===============Kết thúc bắt sự kiện trong popup-func================================================= 
 }
-
-//set Vị trí cho file-container
+//set Vị trí cho file-container lúc đầu tiên và khi thay đổi bằng resize hay là cuộn...
 function setPositionForFileContainer(fileContainer, icon, rect) {
     //Set vị trí cho thẻ container bao ngoài
     console.log(icon);
@@ -267,8 +302,7 @@ function setPositionForFileContainer(fileContainer, icon, rect) {
     }
 }
 
-
-// Tạo hàm để thiết lập URL của hình ảnh
+// Tạo hàm để thiết lập URL của hình ảnh ở trong popup function, tức là lấy hình ảnh từ img để thêm vào trong file-container
 function setIconUrls() {
     const iconUrls = [
         "icon-32.png",
@@ -288,10 +322,21 @@ function setIconUrls() {
 
     return iconUrlsMap;
 }
-//================================================================
 
-//=============================Gọi API chat OpenAI========================
 
+//4.=======================Kết thúc hàm tương tác với icon để hiển thị ra popup và các chức năng translate,revise,...=========================================
+
+
+
+
+/*5.======================================================================
+            CÁC HÀM GỌI API OPENAI VÀ XỬ LÍ KHI TRUY CẬP API BỊ LỖI
+    ======================================================================
+*/
+
+
+
+//Gọi API OpenAI
 function CallOpenAI(myContent) {
     const token = "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"
     fetch('https://api.openai.com/v1/chat/completions', {
@@ -311,6 +356,71 @@ function CallOpenAI(myContent) {
         a = data.choices[0].message.content;
         console.log(data);
         editableElement.value = a;
-    })
+    }).catch(error => {
+        // // Hiển thị thông báo lỗi trên màn hình
+        //setTimeout(showErrorModal(),3000);
+        showErrorModal();
+    });
 }
+// Hàm show ra hộp thoại lỗi khi truy cập tới OpenAI bị lỗi
+function showErrorModal() {
+    // Tạo một div để làm modal
+    const modal = document.createElement('div');
+    modal.style.position = 'fixed';
+    modal.style.zIndex = '999999999';// chú ý cái này vs cái overlay
+    modal.style.left = '50%';
+    modal.style.top = '50%';
+    modal.style.transform = 'translate(-50%, -50%)';
+    modal.style.backgroundColor = 'white';
+    modal.style.padding = '20px 30px 35px';
+    modal.style.borderRadius = '5px';
+    modal.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.3)';
+
+    // Tạo nội dung thông báo là chờ khoảng 10s
+    const message = document.createElement('div');
+    message.textContent = 'Error OpenAI.  Wait 10 seconds or Try again later';
+    modal.appendChild(message);
+
+    // Tạo nút close modal
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'OK';
+    closeButton.style.cursor = 'pointer';
+    closeButton.style.position = 'absolute';
+    closeButton.style.marginTop = '5px'; // Khoảng cách giữa nội dung và nút OK
+    closeButton.style.left = '50%';
+    closeButton.style.transform = 'translateX(-50%)';
+    closeButton.onclick = function () {
+        modal.remove();
+        removeOverlay();// chú ý chỗ này là sẽ xóa đi cái Overlay để  mà có thể truy cập dô tương tác vs web
+    };
+
+    // Thêm nút close vào modal
+    modal.appendChild(closeButton);
+
+    // Thêm modal vào body của trang web
+    document.body.appendChild(modal);
+    //================================================
+    // Tạo lớp overlay để nó chỉ thua 1 cái modal chứa nút OK 1 zIndex để nó khóa tương tác với web,
+    //khi nào nhấn nút ok rồi thì nó với hiển thị lại trag web như bt cho mình xài.
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    overlay.style.zIndex = '999999998';
+
+    // Thêm overlay vào body để chặn tương tác với trang
+    document.body.appendChild(overlay);
+
+    function removeOverlay() {
+        // Loại bỏ overlay khi modal đóng đi
+        overlay.remove();
+    }
+}
+
+//5.===========Kết thúc gọi OpenAI===========================================
+
+
 // //https://youtu.be/SnV2fkAawrc?si=1coB_fwx_t1U5RHz
