@@ -156,7 +156,7 @@ function createIcon() {
 
 
 /*4.======================================================================
-        CÁC HÀM THỰC HIỆN KHI CLICK VÀO ICON THÌ HIỂN THỊ RA BẢNG ĐỂ TƯƠNG TÁC VỚI USER VÀ ẨN BẢNG
+        CÁC HÀM THỰC HIỆN KHI CLICK VÀO ICON THÌ HIỂN THỊ RA BẢNG ĐỂ TƯƠNG TÁC VỚI USER VÀ BẮT CÁC SỰ KIỆN CHỨC NĂNG
     ====================================================================== 
  */
 
@@ -233,7 +233,7 @@ function setInnerContainerContent(data, icon) {
     iconXElement.addEventListener('click', () => {
         hideFileContainer();
     })
-    //======== Bắt sự kiện nút dịch
+    //======== Bắt sự kiện nút dịch========
     const iconTranslateElement = document.querySelector("#translate");
     const select = iconTranslateElement.querySelector("#select-language");
     select.addEventListener('change', function () {
@@ -262,7 +262,7 @@ function setInnerContainerContent(data, icon) {
             CallOpenAI(myNewContentRevise);
         }
     })
-    //=======Bắt sự kiện nút summarise
+    //=======Bắt sự kiện nút summarise=======
     const iconSummariseElement = document.querySelector("#summarize");
     iconSummariseElement.addEventListener('click', function () {
         const myContentSummarise = editableElement.value;
@@ -273,6 +273,32 @@ function setInnerContainerContent(data, icon) {
             CallOpenAI(myNewContentSummarise);
         }
     })
+    //======Bắt sự kiện chat AI====================
+    const btnSendToChatAI=document.querySelector("#icon-send");
+    btnSendToChatAI.addEventListener('click',()=>{
+        const txtTextAskAI=document.querySelector("#text-chat-with-ai");
+        if(txtTextAskAI.value===""){
+            console.log("Nhập input vào");
+        }else{
+            myNewContentChatAI=txtTextAskAI.value;
+            editableElement.value="";
+            CallOpenAI(myNewContentChatAI);
+        }
+    })
+    //Bắt sự kiện khi gõ text chat AI xong nhấn enter
+    const txtTextAskAI_1=document.querySelector("#text-chat-with-ai");
+    txtTextAskAI_1.addEventListener('keyup', (e)=>{
+        if (e.key === "Enter") {
+            if(txtTextAskAI_1.value===""){
+                console.log("Nhập input vào");
+            }else{
+                myNewContentChatAI=txtTextAskAI_1.value;
+                editableElement.value="";
+                CallOpenAI(myNewContentChatAI);   
+            }
+        }
+    })
+
     //===============Kết thúc bắt sự kiện trong popup-func================================================= 
 }
 //set Vị trí cho file-container lúc đầu tiên và khi thay đổi bằng resize hay là cuộn...
@@ -338,7 +364,12 @@ function setIconUrls() {
 
 //Gọi API OpenAI
 function CallOpenAI(myContent) {
-    const token = "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"
+    //Lấy txtValue để khi mà nó chạy sai đi, mà chạy lại lần nữa thì cái nội dung trong ô input vẫn là nội dung cũ
+    //chứ không phải là loading...loading...
+    const txtValue=editableElement.value;// sử dụng trong catch ở dưới
+    //Thay đổi nội dung trong ô input loading để người dùng biết là tiến trình đang đc xử lí
+    editableElement.value=txtValue+" Loading...";
+    const token = "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";
     fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -357,8 +388,12 @@ function CallOpenAI(myContent) {
         console.log(data);
         editableElement.value = a;
     }).catch(error => {
-        // // Hiển thị thông báo lỗi trên màn hình
-        //setTimeout(showErrorModal(),3000);
+        
+        //Để mà nếu xảy ra lỗi khi dịch thất bại, thì nó sẽ set cái lựa chọn ngôn ngữ về trạng thái là "Choose"
+        const select1 = document.querySelector("#select-language");
+        select1.selectedIndex = 0;
+        editableElement.value=txtValue;
+        // Hiển thị thông báo lỗi trên màn hình
         showErrorModal();
     });
 }
@@ -419,6 +454,8 @@ function showErrorModal() {
         overlay.remove();
     }
 }
+
+
 
 //5.===========Kết thúc gọi OpenAI===========================================
 
